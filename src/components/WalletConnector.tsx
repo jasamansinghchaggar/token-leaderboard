@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import { walletManager, type WalletOption } from "@/lib/wallet";
 import { parseError, displayError } from "@/lib/errorHandler";
+import { registerUser } from "@/lib/userService";
 import { useAppStore } from "@/stores/appStore";
 
 export function WalletConnector() {
@@ -18,6 +19,7 @@ export function WalletConnector() {
   const [wallets, setWallets] = useState<WalletOption[]>([]);
   const [selectedWallet, setSelectedWallet] = useState("");
   const [loading, setLoading] = useState(false);
+  const [registering, setRegistering] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -47,6 +49,18 @@ export function WalletConnector() {
       const walletInfo = await walletManager.connectWallet(selectedWallet);
       setWallet(walletInfo);
       setIsConnected(true);
+
+      setRegistering(true);
+      try {
+        await registerUser({
+          publicKey: walletInfo.publicKey,
+          walletName: walletInfo.name,
+        });
+      } catch (registrationError) {
+        console.warn("Backend registration failed (non-critical):", registrationError);
+      } finally {
+        setRegistering(false);
+      }
     } catch (err) {
       const appError = parseError(err);
       setError(displayError(appError));
@@ -69,6 +83,7 @@ export function WalletConnector() {
             {wallet.publicKey.slice(0, 10)}...{wallet.publicKey.slice(-8)}
           </span>
         </p>
+        {registering ? <span className="text-xs text-blue-600">Registering...</span> : null}
         <Button variant="outline" onClick={handleDisconnect}>
           Disconnect
         </Button>

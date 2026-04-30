@@ -1,57 +1,42 @@
 import axios from "axios";
 
-const HORIZON_URL =
-  process.env.NEXT_PUBLIC_HORIZON_URL ?? "https://horizon-testnet.stellar.org";
-
-interface HorizonBalance {
-  balance: string;
-  asset_type: string;
-  asset_code?: string;
-}
+const HORIZON_URL = process.env.NEXT_PUBLIC_HORIZON_URL || "https://horizon-testnet.stellar.org";
 
 export interface LeaderboardEntry {
-  address: string;
+  publicKey: string;
   balance: number;
   rank: number;
 }
 
-export async function getAccountBalance(
-  publicKey: string,
-  assetCode?: string
-): Promise<number> {
-  try {
-    const response = await axios.get(`${HORIZON_URL}/accounts/${publicKey}`);
-    const balances = response.data.balances as HorizonBalance[];
-
-    if (assetCode) {
-      const assetBalance = balances.find((balance) => balance.asset_code === assetCode);
-      return assetBalance ? Number.parseFloat(assetBalance.balance) : 0;
-    }
-
-    const nativeBalance = balances.find((balance) => balance.asset_type === "native");
-    return nativeBalance ? Number.parseFloat(nativeBalance.balance) : 0;
-  } catch {
-    throw new Error("Failed to fetch account balance");
-  }
+interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
 }
 
-export async function getLeaderboard(addresses: string[]): Promise<LeaderboardEntry[]> {
+export async function getLeaderboard(): Promise<LeaderboardEntry[]> {
   try {
-    const balances = await Promise.all(
-      addresses.map(async (address) => ({
-        address,
-        balance: await getAccountBalance(address),
-      }))
-    );
+    const response = await fetch("/api/leaderboard?refresh=true", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+    });
 
-    return balances
-      .sort((a, b) => b.balance - a.balance)
-      .map((entry, index) => ({
-        ...entry,
-        rank: index + 1,
-      }));
-  } catch {
-    throw new Error("Failed to fetch leaderboard data");
+    if (!response.ok) {
+      throw new Error(`Failed to fetch leaderboard: ${response.status}`);
+    }
+
+    const payload = (await response.json()) as ApiResponse<LeaderboardEntry[]>;
+    if (!payload.success) {
+      throw new Error(payload.error || "Failed to fetch leaderboard");
+    }
+
+    return payload.data || [];
+  } catch (error) {
+    console.error("Failed to fetch leaderboard:", error);
+    throw error;
   }
 }
 

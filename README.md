@@ -5,7 +5,7 @@ A multi-wallet token leaderboard application with smart contract integration on 
 ## Features
 
 - Multi-wallet support (Stellar Wallets Kit)
-- Real-time token holder rankings from Horizon API
+- Real-time token holder rankings from Next.js API + Horizon API
 - Soroban smart contract scaffolding
 - Transaction status tracking
 - Error handling for wallet issues
@@ -15,6 +15,7 @@ A multi-wallet token leaderboard application with smart contract integration on 
 - **Frontend:** Next.js, TypeScript, Shadcn UI, Tailwind CSS
 - **Wallet:** Stellar Wallets Kit
 - **Smart Contract:** Soroban (Rust)
+- **Backend/API:** Next.js Route Handlers, MongoDB, Mongoose
 - **Data:** Stellar Horizon API
 
 ## Setup
@@ -32,7 +33,7 @@ npm install
 cp .env.example .env
 ```
 
-Update `.env` with your deployed contract ID.
+Update `.env` with your deployed contract ID and MongoDB URI.
 
 ### Run Development Server
 
@@ -41,6 +42,14 @@ npm run dev
 ```
 
 Open `http://localhost:3000`.
+
+### API Endpoints
+
+- `POST /api/users` – store/update connected wallet
+- `GET /api/leaderboard` – read cached leaderboard
+- `GET /api/leaderboard?refresh=true` – refresh from Horizon then return ranking
+- `POST /api/leaderboard/refresh` – manual refresh trigger
+- `GET /api/health` – API health status
 
 ### Build Contract
 

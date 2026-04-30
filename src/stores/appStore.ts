@@ -1,6 +1,11 @@
 import { create } from "zustand";
 import type { WalletInfo } from "@/lib/wallet";
-import type { LeaderboardEntry } from "@/lib/horizon";
+
+interface LeaderboardViewEntry {
+  address: string;
+  balance: number;
+  rank: number;
+}
 
 export interface TransactionStatus {
   hash: string;
@@ -12,11 +17,11 @@ interface AppState {
   wallet: WalletInfo | null;
   isConnected: boolean;
   transactionStatus: TransactionStatus | null;
-  leaderboardData: LeaderboardEntry[];
+  leaderboardData: LeaderboardViewEntry[];
   setWallet: (wallet: WalletInfo | null) => void;
   setIsConnected: (connected: boolean) => void;
   setTransactionStatus: (status: TransactionStatus | null) => void;
-  setLeaderboardData: (data: LeaderboardEntry[]) => void;
+  setLeaderboardData: (data: LeaderboardViewEntry[]) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({

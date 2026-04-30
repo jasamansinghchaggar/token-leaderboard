@@ -9,10 +9,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import type { LeaderboardEntry } from "@/lib/horizon";
 
 interface LeaderboardTableProps {
-  data: LeaderboardEntry[];
+  data: Array<{
+    address: string;
+    balance: number;
+    rank: number;
+  }>;
   loading?: boolean;
 }
 
