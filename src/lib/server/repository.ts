@@ -7,7 +7,7 @@ export async function createUser(publicKey: string, walletName: string) {
   return User.findOneAndUpdate(
     { publicKey },
     { publicKey, walletName },
-    { upsert: true, new: true, setDefaultsOnInsert: true }
+    { upsert: true, returnDocument: "after", setDefaultsOnInsert: true }
   );
 }
 
@@ -22,7 +22,7 @@ export async function updateLeaderboardEntry(publicKey: string, balance: number,
   return LeaderboardEntryModel.findOneAndUpdate(
     { publicKey },
     { publicKey, balance, rank, lastFetched: new Date() },
-    { upsert: true, new: true, setDefaultsOnInsert: true }
+    { upsert: true, returnDocument: "after", setDefaultsOnInsert: true }
   );
 }
 
