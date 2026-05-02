@@ -10,7 +10,7 @@ import { getLeaderboard } from "@/lib/horizon";
 import { useAppStore } from "@/stores/appStore";
 
 export function HomeClient() {
-  const { isConnected } = useAppStore();
+  const { isConnected, hasHydrated } = useAppStore();
   const [leaderboardData, setLeaderboardData] = useState<
     Array<{ address: string; balance: number; rank: number }>
   >([]);
@@ -66,7 +66,7 @@ export function HomeClient() {
               Real-time token holder rankings on Stellar testnet
             </p>
             <p className="text-sm text-muted-foreground">
-              Wallet: {isConnected ? "Connected" : "Not connected"}
+              Wallet: {hasHydrated ? (isConnected ? "Connected" : "Not connected") : "Loading..."}
             </p>
           </div>
 

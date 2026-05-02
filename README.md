@@ -1,64 +1,111 @@
-# Token Leaderboard - Level 2 Stellar
+# Token Leaderboard (Stellar Soroban)
 
-A multi-wallet token leaderboard application with smart contract integration on Stellar Soroban testnet.
+A polished multi-wallet leaderboard dApp on Stellar testnet, built with Next.js + shadcn/ui, with wallet-based interactions and Soroban contract integration.
+
+## Submission Checklist
+
+| Requirement | Status | Evidence / Notes |
+|---|---|---|
+| Public GitHub repository | ⚠️ Verify before submission | Set repo visibility to **Public** in GitHub settings. |
+| README with setup instructions | ✅ Done | This README includes local setup, contract build/deploy, and env configuration. |
+| Minimum 2+ meaningful commits | ✅ Done | Current branch has **4 commits**. |
+| Live demo link (optional) | ⚠️ Add link | Add deployed URL in the section below. |
+| Screenshot: wallet options available | ⚠️ Add screenshot | Add screenshot file and update path below. |
+| Deployed contract address | ⚠️ Add address | Add deployed Soroban contract ID below. |
+| Contract call transaction hash (verifiable) | ⚠️ Add hash | Add tx hash + Stellar Expert link below. |
+
+## Required Submission Details
+
+| Item | Value |
+|---|---|
+| Live Demo (Optional) | `<https://your-deployment-url>` |
+| Wallet Options Screenshot | `./public/screenshots/wallet-options.png` |
+| Deployed Contract Address | `CB2J4VBSTIC7W62POHMFX4U2DMDKEPZ5FYI4LECWH2ZBP3W6Y3SOD225` |
+| Contract Call Transaction Hash | `9a79ded9601894482a17c9438b03d8f4a3dc5f01c42a30241f600a580436b422` |
+| Explorer Link | `https://stellar.expert/explorer/testnet/tx/9a79ded9601894482a17c9438b03d8f4a3dc5f01c42a30241f600a580436b422` |
+
+> Add your screenshot at `public/screenshots/wallet-options.png` so it renders here:
+>
+> ![Wallet options available](./public/screenshots/wallet-options.png)
 
 ## Features
 
-- Multi-wallet support (Stellar Wallets Kit)
-- Real-time token holder rankings from Next.js API + Horizon API
-- Soroban smart contract scaffolding
-- Transaction status tracking
-- Error handling for wallet issues
+- Multi-wallet connection (Stellar Wallets Kit)
+- Persistent wallet connection state across refresh
+- Explicit disconnect state handling with local storage persistence
+- Real-time leaderboard from Horizon + backend refresh routes
+- Soroban contract call utilities and transaction status reporting
+- Robust UI error handling for wallet/network edge cases
 
 ## Tech Stack
 
-- **Frontend:** Next.js, TypeScript, Shadcn UI, Tailwind CSS
-- **Wallet:** Stellar Wallets Kit
-- **Smart Contract:** Soroban (Rust)
-- **Backend/API:** Next.js Route Handlers, MongoDB, Mongoose
-- **Data:** Stellar Horizon API
+| Layer | Stack |
+|---|---|
+| Frontend | Next.js 16, React 19, TypeScript, Tailwind CSS, shadcn/ui |
+| Wallet | `@creit.tech/stellar-wallets-kit` |
+| Backend/API | Next.js Route Handlers, MongoDB, Mongoose |
+| Blockchain | Stellar Horizon + Soroban RPC |
+| Smart Contract | Rust (Soroban) |
 
-## Setup
+## Local Setup
 
-### Prerequisites
+### 1. Prerequisites
 
 - Node.js 18+
-- Rust + Soroban CLI
-- A Stellar testnet account
+- npm
+- Rust toolchain + Soroban CLI
+- A Stellar testnet wallet/account
 
-### Installation
+### 2. Install dependencies
 
 ```bash
 npm install
+```
+
+### 3. Configure environment
+
+```bash
 cp .env.example .env
 ```
 
-Update `.env` with your deployed contract ID and MongoDB URI.
+Update `.env` values:
 
-### Run Development Server
+| Key | Description |
+|---|---|
+| `NEXT_PUBLIC_SOROBAN_RPC_URL` | Soroban RPC endpoint (testnet default provided) |
+| `NEXT_PUBLIC_NETWORK_PASSPHRASE` | Network passphrase (testnet default provided) |
+| `NEXT_PUBLIC_CONTRACT_ID` | Your deployed Soroban contract address |
+| `NEXT_PUBLIC_HORIZON_URL` | Horizon endpoint (testnet default provided) |
+| `MONGODB_URI` | MongoDB connection string |
+
+### 4. Start the app
 
 ```bash
 npm run dev
 ```
 
-Open `http://localhost:3000`.
+Open: `http://localhost:3000`
 
-### API Endpoints
+## API Endpoints
 
-- `POST /api/users` – store/update connected wallet
-- `GET /api/leaderboard` – read cached leaderboard
-- `GET /api/leaderboard?refresh=true` – refresh from Horizon then return ranking
-- `POST /api/leaderboard/refresh` – manual refresh trigger
-- `GET /api/health` – API health status
+| Method | Route | Purpose |
+|---|---|---|
+| `POST` | `/api/users` | Create/update connected wallet user |
+| `GET` | `/api/leaderboard` | Fetch cached leaderboard |
+| `GET` | `/api/leaderboard?refresh=true` | Refresh from Horizon and return leaderboard |
+| `POST` | `/api/leaderboard/refresh` | Trigger manual refresh |
+| `GET` | `/api/health` | Health check |
 
-### Build Contract
+## Soroban Contract
+
+### Build
 
 ```bash
 cd contracts/token-leaderboard
 soroban contract build
 ```
 
-### Deploy Contract (Testnet)
+### Deploy (testnet)
 
 ```bash
 soroban config network add \
@@ -72,8 +119,4 @@ soroban contract deploy \
   --network testnet
 ```
 
-## Deployment Details (Fill After Deploy)
-
-- **Live Demo:** `<vercel-link>`
-- **Contract Address:** `<contract-address>`
-- **Transaction Hash:** `<transaction-hash>`
+Use the returned contract ID as `NEXT_PUBLIC_CONTRACT_ID`.

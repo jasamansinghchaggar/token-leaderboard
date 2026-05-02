@@ -15,7 +15,7 @@ import { registerUser } from "@/lib/userService";
 import { useAppStore } from "@/stores/appStore";
 
 export function WalletConnector() {
-  const { wallet, setWallet, setIsConnected } = useAppStore();
+  const { wallet, hasHydrated, setConnection } = useAppStore();
   const [wallets, setWallets] = useState<WalletOption[]>([]);
   const [selectedWallet, setSelectedWallet] = useState("");
   const [loading, setLoading] = useState(false);
@@ -47,8 +47,7 @@ export function WalletConnector() {
 
     try {
       const walletInfo = await walletManager.connectWallet(selectedWallet);
-      setWallet(walletInfo);
-      setIsConnected(true);
+      setConnection(walletInfo);
 
       setRegistering(true);
       try {
@@ -70,9 +69,13 @@ export function WalletConnector() {
   };
 
   const handleDisconnect = () => {
-    setWallet(null);
-    setIsConnected(false);
+    setConnection(null);
+    setSelectedWallet("");
   };
+
+  if (!hasHydrated) {
+    return <p className="text-sm text-muted-foreground">Loading wallet state...</p>;
+  }
 
   if (wallet) {
     return (

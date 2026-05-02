@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 import type { WalletInfo } from "@/lib/wallet";
 
 interface LeaderboardViewEntry {
@@ -16,21 +17,42 @@ export interface TransactionStatus {
 interface AppState {
   wallet: WalletInfo | null;
   isConnected: boolean;
+  hasHydrated: boolean;
   transactionStatus: TransactionStatus | null;
   leaderboardData: LeaderboardViewEntry[];
-  setWallet: (wallet: WalletInfo | null) => void;
-  setIsConnected: (connected: boolean) => void;
+  setConnection: (wallet: WalletInfo | null) => void;
+  setHasHydrated: (hydrated: boolean) => void;
   setTransactionStatus: (status: TransactionStatus | null) => void;
   setLeaderboardData: (data: LeaderboardViewEntry[]) => void;
 }
 
-export const useAppStore = create<AppState>((set) => ({
-  wallet: null,
-  isConnected: false,
-  transactionStatus: null,
-  leaderboardData: [],
-  setWallet: (wallet) => set({ wallet }),
-  setIsConnected: (connected) => set({ isConnected: connected }),
-  setTransactionStatus: (status) => set({ transactionStatus: status }),
-  setLeaderboardData: (data) => set({ leaderboardData: data }),
-}));
+export const useAppStore = create<AppState>()(
+  persist(
+    (set) => ({
+      wallet: null,
+      isConnected: false,
+      hasHydrated: false,
+      transactionStatus: null,
+      leaderboardData: [],
+      setConnection: (wallet) =>
+        set({
+          wallet,
+          isConnected: wallet !== null,
+        }),
+      setHasHydrated: (hydrated) => set({ hasHydrated: hydrated }),
+      setTransactionStatus: (status) => set({ transactionStatus: status }),
+      setLeaderboardData: (data) => set({ leaderboardData: data }),
+    }),
+    {
+      name: "wallet-connection-state",
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({
+        wallet: state.wallet,
+        isConnected: state.isConnected,
+      }),
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
+    }
+  )
+);
