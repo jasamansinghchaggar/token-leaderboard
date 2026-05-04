@@ -2,31 +2,14 @@
 
 A polished multi-wallet leaderboard dApp on Stellar testnet, built with Next.js + shadcn/ui, with wallet-based interactions and Soroban contract integration.
 
-## Submission Checklist
-
-| Requirement | Status | Evidence / Notes |
-|---|---|---|
-| Public GitHub repository | ⚠️ Verify before submission | Set repo visibility to **Public** in GitHub settings. |
-| README with setup instructions | ✅ Done | This README includes local setup, contract build/deploy, and env configuration. |
-| Minimum 2+ meaningful commits | ✅ Done | Current branch has **4 commits**. |
-| Live demo link (optional) | ⚠️ Add link | Add deployed URL in the section below. |
-| Screenshot: wallet options available | ⚠️ Add screenshot | Add screenshot file and update path below. |
-| Deployed contract address | ⚠️ Add address | Add deployed Soroban contract ID below. |
-| Contract call transaction hash (verifiable) | ⚠️ Add hash | Add tx hash + Stellar Expert link below. |
-
-## Required Submission Details
-
 | Item | Value |
 |---|---|
-| Live Demo (Optional) | `<https://your-deployment-url>` |
-| Wallet Options Screenshot | `./public/screenshots/wallet-options.png` |
+| Live Demo | `https://token-leaderboard-zeta.vercel.app` |
 | Deployed Contract Address | `CB2J4VBSTIC7W62POHMFX4U2DMDKEPZ5FYI4LECWH2ZBP3W6Y3SOD225` |
 | Contract Call Transaction Hash | `9a79ded9601894482a17c9438b03d8f4a3dc5f01c42a30241f600a580436b422` |
 | Explorer Link | `https://stellar.expert/explorer/testnet/tx/9a79ded9601894482a17c9438b03d8f4a3dc5f01c42a30241f600a580436b422` |
 
-> Add your screenshot at `public/screenshots/wallet-options.png` so it renders here:
->
-> ![Wallet options available](./public/screenshots/wallet-options.png)
+![Wallet options available](./public/token-leaderboard-landing.png)
 
 ## Features
 
