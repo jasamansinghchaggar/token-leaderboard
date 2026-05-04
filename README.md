@@ -9,7 +9,7 @@ A polished multi-wallet leaderboard dApp on Stellar testnet, built with Next.js 
 | Contract Call Transaction Hash | `9a79ded9601894482a17c9438b03d8f4a3dc5f01c42a30241f600a580436b422` |
 | Explorer Link | `https://stellar.expert/explorer/testnet/tx/9a79ded9601894482a17c9438b03d8f4a3dc5f01c42a30241f600a580436b422` |
 
-![Wallet options available](./public/token-leaderboard-landing.png)
+<img width="925" height="508" alt="Screenshot 2026-05-04 at 12 02 28" src="https://github.com/user-attachments/assets/efc8486c-e6c0-4ef6-a21c-3e2a4e4b321c" />
 
 ## Features
 
